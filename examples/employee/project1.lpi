@@ -44,7 +44,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="148">
+    <Units Count="150">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -62,7 +62,7 @@
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="35"/>
-        <CursorPos X="65" Y="35"/>
+        <CursorPos X="14" Y="39"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -141,8 +141,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="187"/>
-        <CursorPos X="30" Y="200"/>
+        <CursorPos X="28" Y="7"/>
         <UsageCount Value="10"/>
       </Unit11>
       <Unit12>
@@ -1104,6 +1103,22 @@
         <TopLine Value="247"/>
         <UsageCount Value="10"/>
       </Unit147>
+      <Unit148>
+        <Filename Value="../../design/ibmodifysqleditor.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit148>
+      <Unit149>
+        <Filename Value="../../design/ibmodifysqleditor.pas"/>
+        <ComponentName Value="IBModifySQLEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="13"/>
+        <CursorPos X="50" Y="35"/>
+        <UsageCount Value="10"/>
+      </Unit149>
     </Units>
     <JumpHistory Count="1">
       <Position1>

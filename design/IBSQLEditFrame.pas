@@ -27,6 +27,9 @@ unit IBSQLEditFrame;
 
 {$mode objfpc}{$H+}
 
+{define this symbol if you want all generated SQL to be in upper case}
+{ $DEFINE GENERATE_SQL_ALL_UPPERCASE}
+
 interface
 
 uses
@@ -226,6 +229,36 @@ const
                     '(Select RDB$FIELD_NAME FROM RDB$INDEX_SEGMENTS S JOIN RDB$RELATION_CONSTRAINTS C On C.RDB$INDEX_NAME = S.RDB$INDEX_NAME '+
                      'Where C.RDB$CONSTRAINT_TYPE = ''PRIMARY KEY'' and C.RDB$RELATION_NAME = RF.RDB$RELATION_NAME)';
 
+  {SQL Reserved words used here}
+
+{$IFDEF GENERATE_SQL_ALL_UPPERCASE}
+  sSelect       =     'SELECT';
+  sFrom         =     'FROM';
+  sUpdate       =     'UPDATE';
+  sSet          =     'SET';
+  sInsertInto   =     'INSERT INTO';
+  sDeleteFrom   =     'DELETE FROM';
+  sWhere        =     'WHERE';
+  sAnd          =     'AND';
+  sNot          =     'NOT';
+  sValues       =     'VALUES';
+  sReturning    =     'RETURNING';
+  sExecuteProcedure = 'EXECUTE PROCEDURE';
+{$ELSE}
+  sSelect       =     'Select';
+  sFrom         =     'From';
+  sUpdate       =     'Update';
+  sSet          =     'Set';
+  sInsertInto   =     'Insert Into';
+  sDeleteFrom   =     'Delete From';
+  sWhere        =     'Where';
+  sAnd          =     'and';
+  sNot          =     'not';
+  sValues       =     'Values';
+  sReturning    =     'Returning';
+  sExecuteProcedure = 'Execute Procedure';
+{$ENDIF}
+
 type
 
   { TSQLStatementExtractor }
@@ -362,7 +395,7 @@ begin
     if ExecuteOnlyProcs then
       (DataSet as TIBQuery).Parser.Add2WhereClause('RDB$PROCEDURE_TYPE = 2');
     if SelectProcs then
-      (DataSet as TIBQuery).Parser.Add2WhereClause('RDB$PROCEDURE_TYPE = 1 AND RDB$PROCEDURE_OUTPUTS > 0');
+      (DataSet as TIBQuery).Parser.Add2WhereClause('RDB$PROCEDURE_TYPE = 1 ' + sAnd + ' RDB$PROCEDURE_OUTPUTS > 0');
   end;
   if PackageNames.Active then
   begin
@@ -809,7 +842,7 @@ var WhereClause: string;
     ColParamName: string;
 begin
   Count := 0;
-  WhereClause := 'Where';
+  WhereClause := sWhere;
   Separator := ' A.';
   with PrimaryKeys do
   begin
@@ -838,7 +871,7 @@ begin
                            QuoteIdentifierIfNeeded(Database.SQLDialect,ColumnName) +
                            ' = :' +
                            QuoteIdentifierIfNeeded(Database.SQLDialect,ColParamName);
-          Separator := ' AND A.';
+          Separator := ' ' + sAnd + ' A.';
         end;
         Next;
       end;
@@ -911,12 +944,12 @@ var SelectSQL: string;
     I: integer;
     Lines: TStrings;
 begin
-  SelectSQL := 'Select';
+  SelectSQL := sSelect;
   Separator := ' A.';
   for I := 0 to PrimaryKeyNames.Count - 1 do
   begin
     if QuotedStrings then
-      SelectSQL := SelectSQL + Separator + '"' + PrimaryKeyNames[I] + '"'
+      SelectSQL := SelectSQL + Separator + QuoteIdentifier(Database.SQLDialect,PrimaryKeyNames[I])
     else
       SelectSQL := SelectSQL + Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,PrimaryKeyNames[I]);
     Separator := ', A.';
@@ -924,15 +957,15 @@ begin
   for I := 0 to FieldNames.Count - 1 do
   begin
     if QuotedStrings then
-      SelectSQL := SelectSQL + Separator + '"' + FieldNames[I] + '"'
+      SelectSQL := SelectSQL + Separator + QuoteIdentifier(Database.SQLDialect,FieldNames[I])
     else
       SelectSQL := SelectSQL + Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,FieldNames[I]);
     Separator := ', A.';
   end;
   if QuotedStrings then
-    SelectSQL := SelectSQL + ' From "' + TableName + '" A'
+    SelectSQL := SelectSQL + ' ' + sFrom + ' ' + QuoteIdentifier(Database.SQLDialect,TableName) + ' A'
   else
-    SelectSQL := SelectSQL + ' From ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A';
+    SelectSQL := SelectSQL + ' ' + sFrom + ' ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A';
   Lines := TStringList.Create;
   try
     Lines.Text := SelectSQL;
@@ -952,26 +985,26 @@ begin
   Lines := TStringList.Create;
   try
     if QuotedStrings then
-      InsertSQL := 'Insert Into "' + TableName + '" ('
+      InsertSQL := sInsertInto + ' ' + QuoteIdentifier(Database.SQLDialect,TableName) + ' ('
     else
-      InsertSQL := 'Insert Into ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' (';
+      InsertSQL := sInsertInto + ' ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' (';
     Separator := '';
     for I := 0 to FieldNames.Count - 1 do
       begin
         if QuotedStrings then
-           InsertSQL := InsertSQL + Separator + '"' + FieldNames[I] + '"'
+           InsertSQL := InsertSQL + Separator + QuoteIdentifier(Database.SQLDialect,FieldNames[I])
         else
            InsertSQL := InsertSQL + Separator +  QuoteIdentifierIfNeeded(Database.SQLDialect,FieldNames[I]) ;
         Separator := ', ';
       end;
     InsertSQL := InsertSQL + ')';
     Lines.Add(InsertSQL);
-    InsertSQL := 'Values(';
+    InsertSQL := sValues+ '(';
     Separator := ':';
     for I := 0 to FieldNames.Count - 1 do
       begin
         if QuotedStrings then
-          InsertSQL := InsertSQL + Separator +  '"' + AnsiUpperCase(FieldNames[I]) + '"'
+          InsertSQL := InsertSQL + Separator +  QuoteIdentifier(Database.SQLDialect,AnsiUpperCase(FieldNames[I]))
         else
           InsertSQL := InsertSQL + Separator +  QuoteIdentifierIfNeeded(Database.SQLDialect,AnsiUpperCase(FieldNames[I])) ;
          Separator := ', :';
@@ -984,7 +1017,7 @@ begin
         ((DatabaseInfo.ODSMajorVersion = 11) and (DatabaseInfo.ODSMinorVersion >= 1)) then
     begin
       InsertSQL := '';
-      Separator := ' RETURNING ';
+      Separator := ' ' + sReturning + ' ';
       if IdentityCols.Active and (IdentityCols.RecordCount > 0) then
       begin
         IdentityCols.First;
@@ -1003,7 +1036,7 @@ begin
       for I := 0 to ReadOnlyFieldNames.Count - 1 do
         begin
           if QuotedStrings then
-            InsertSQL := InsertSQL + Separator + '"' + ReadOnlyFieldNames[I] + '"'
+            InsertSQL := InsertSQL + Separator + QuoteIdentifier(Database.SQLDialect,ReadOnlyFieldNames[I])
           else
             InsertSQL := InsertSQL + Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,ReadOnlyFieldNames[I]);
           Separator := ', ';
@@ -1024,14 +1057,15 @@ var UpdateSQL: string;
 begin
   Separator := '  A.';
   if QuotedStrings then
-    UpdateSQL := 'Update "' + TableName + '" A Set '
+    UpdateSQL := sUpdate + ' ' + QuoteIdentifier(Database.SQLDialect,TableName) + ' A ' + sSet + ' '
   else
-    UpdateSQL := 'Update ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A Set ';
+    UpdateSQL := sUpdate + ' ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A ' + sSet + ' ';
   SQL.Add(UpdateSQL);
   for I := 0 to FieldNames.Count - 1 do
     begin
       if QuotedStrings then
-        UpdateSQL := Separator + '"' + FieldNames[I] + '" = :"' + AnsiUpperCase(FieldNames[I]) + '"'
+        UpdateSQL := Separator + QuoteIdentifier(Database.SQLDialect,FieldNames[I]) + ' = :' +
+                                 QuoteIdentifier(Database.SQLDialect,AnsiUpperCase(FieldNames[I]))
       else
         UpdateSQL := Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,FieldNames[I]) + ' = :' +
                                  QuoteIdentifierIfNeeded(Database.SQLDialect,AnsiUpperCase(FieldNames[I]));
@@ -1045,12 +1079,12 @@ begin
   if (DatabaseInfo.ODSMajorVersion > 11) or
       ((DatabaseInfo.ODSMajorVersion = 11) and (DatabaseInfo.ODSMinorVersion >= 1)) then
   begin
-    Separator := ' RETURNING A.';
+    Separator := ' ' + sReturning + ' A.';
     UpdateSQL := '';
     for I := 0 to ReadOnlyFieldNames.Count - 1 do
       begin
         if QuotedStrings then
-          UpdateSQL := UpdateSQL + Separator + '"' + ReadOnlyFieldNames[I] + '"'
+          UpdateSQL := UpdateSQL + Separator +  QuoteIdentifier(Database.SQLDialect,ReadOnlyFieldNames[I])
         else
           UpdateSQL := UpdateSQL + Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,ReadOnlyFieldNames[I]);
         Separator := ', A.';
@@ -1065,9 +1099,9 @@ procedure TIBSQLEditFrame.GenerateDeleteSQL(TableName: string;
     I: integer;   }
 begin
   if QuotedStrings then
-    SQL.Add('Delete From "' + TableName + '" A')
+    SQL.Add(sDeleteFrom + ' ' + QuoteIdentifier(Database.SQLDialect,TableName) + ' A')
   else
-    SQL.Add('Delete From ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A');
+    SQL.Add(sDeleteFrom + ' ' + QuoteIdentifierIfNeeded(Database.SQLDialect,TableName) + ' A');
   AddWhereClause(QuotedStrings,SQL,true);
 {  Separator := ' RETURNING A.';
   ReturningText := '';
@@ -1155,11 +1189,11 @@ begin
     Separator := '';
     if not ExecuteOnly and (OutputParams.Count > 0) then //Select Query
     begin
-      SQL := 'Select ';
+      SQL := sSelect + ' ';
       for I := 0 to OutputParams.Count - 1 do
       begin
         if QuotedStrings then
-          SQL := SQL + Separator + '"' + OutputParams[I] + '"'
+          SQL := SQL + Separator + QuoteIdentifier(Database.SQLDialect,OutputParams[I])
         else
           SQL := SQL + Separator + QuoteIdentifierIfNeeded(Database.SQLDialect,OutputParams[I]);
         Separator := ', ';
@@ -1178,7 +1212,7 @@ begin
     end
     else // Execute Procedure
     begin
-      SQL := 'Execute Procedure ' + GetProcName;
+      SQL := sExecuteProcedure+ ' ' + GetProcName;
       if InputParams.Count > 0 then
       begin
         Separator := ' :';
@@ -1392,7 +1426,7 @@ begin
     SQLExecProcedure:
       begin
         GetSymbols(IdentifyStatementSQL.SQL,Symbols,5);
-        FirstWord := Symbols[0];
+        FirstWord := AnsiUpperCase(Symbols[0]);
         if FirstWord = 'INSERT' then {INSERT...RETURNING}
         begin
           UserTables.Locate('RDB$RELATION_NAME',Symbols[2],[]);

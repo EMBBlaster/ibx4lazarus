@@ -1,3 +1,18 @@
+IBX Change Log  version (2.7-8 Build 1675) Tue, 25 Nov 2025 11:27:33 +0000
+
+1. Fixed corruption in idmodifysqleditor.lfm. Using this editor should no longer
+   result in an access violation.
+
+2. Design Time SQL Editors: Table Names are now shown in alphabetical order.
+
+3. IBSQL Editor: changing the "Use System Tables" checkbox should now refresh table list.
+
+4. Design Time Editors: Replaced embedded SQL Literals with constants
+
+5. Allow for alternative all upper case SQL literals or first letter UC only.
+   Selected by defining the symbol GENERATE_SQL_ALL_UPPERCASE in design/IBSQLEditFrame.pas
+   or in the Custom Options for dclibx.
+
 IBX Change Log  version (2.7-7 Build 0000) Tue, 21 Oct 2025 16:24:00 +0100
 
 1. Added support for TPB parameters isc_tpb_lock_timeout, and  isc_tpb_at_snapshot_number

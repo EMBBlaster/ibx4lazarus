@@ -5,10 +5,9 @@ object IBSQLEditFrame: TIBSQLEditFrame
   Width = 789
   ClientHeight = 585
   ClientWidth = 789
-  LCLVersion = '2.2.0.2'
   TabOrder = 0
-  DesignLeft = 793
-  DesignTop = 388
+  DesignLeft = 792
+  DesignTop = 385
   inline SQLText: TSynEdit
     Left = 0
     Height = 559
@@ -534,7 +533,7 @@ object IBSQLEditFrame: TIBSQLEditFrame
     end
     object ToolButton3: TToolButton
       Left = 49
-      Height = 8
+      Height = 22
       Top = 2
       Caption = 'ToolButton3'
       Style = tbsSeparator
@@ -556,7 +555,7 @@ object IBSQLEditFrame: TIBSQLEditFrame
     end
     object ToolButton7: TToolButton
       Left = 126
-      Height = 8
+      Height = 22
       Top = 2
       Caption = 'ToolButton7'
       Style = tbsSeparator
@@ -968,15 +967,16 @@ object IBSQLEditFrame: TIBSQLEditFrame
     SQL.Strings = (
       'Select trim(RDB$RELATION_NAME) as RDB$RELATION_NAME,'
       'RDB$RELATION_ID  From RDB$RELATIONS'
+      'order by 1'
       ''
     )
     Params = <>
-    SQLFiltered = False
+    SQLFiltered = True
     DataSetCloseAction = dcDiscardChanges
     TZTextOption = tzOffset
     DefaultTZDate = 43831
     Left = 346
-    Top = 60
+    Top = 52
   end
   object FieldsSource: TDataSource
     DataSet = FieldNameList
@@ -1048,6 +1048,7 @@ object IBSQLEditFrame: TIBSQLEditFrame
       '(Select RDB$INDEX_NAME,RDB$FIELD_NAME FROM RDB$INDEX_SEGMENTS Order by RDB$FIELD_POSITION ASC) S'
       'JOIN RDB$RELATION_CONSTRAINTS C On C.RDB$INDEX_NAME = S.RDB$INDEX_NAME'
       'Where C.RDB$CONSTRAINT_TYPE = ''PRIMARY KEY'' and RDB$RELATION_NAME = :RDB$RELATION_NAME'
+      ''
     )
     Params = <    
       item

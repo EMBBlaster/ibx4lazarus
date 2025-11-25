@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units Count="153">
+    <Units Count="155">
       <Unit0>
         <Filename Value="DBAdmin.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -33,9 +33,10 @@
         <ResourceBaseClass Value="DataModule"/>
         <EditorIndex Value="1"/>
         <TopLine Value="22"/>
-        <CursorPos X="67" Y="33"/>
+        <CursorPos X="48" Y="34"/>
         <UsageCount Value="171"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="dlg/DBLoginDlgUnit.pas"/>
@@ -453,8 +454,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="18" Y="14"/>
-        <UsageCount Value="3"/>
+        <TopLine Value="401"/>
+        <CursorPos X="3" Y="403"/>
+        <UsageCount Value="10"/>
       </Unit54>
       <Unit55>
         <Filename Value="/usr/share/fpcsrc/packages/fcl-db/src/base/fields.inc"/>
@@ -514,9 +516,10 @@
       </Unit62>
       <Unit63>
         <Filename Value="../../changelog"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="107" Y="6"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="90" Y="8"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit63>
       <Unit64>
@@ -733,10 +736,11 @@
       </Unit94>
       <Unit95>
         <Filename Value="../../runtime/nongui/IBCustomDataSet.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="4327"/>
-        <CursorPos Y="4346"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="1745"/>
+        <CursorPos X="3" Y="1748"/>
         <UsageCount Value="15"/>
+        <Loaded Value="True"/>
       </Unit95>
       <Unit96>
         <Filename Value="../../runtime/nongui/IBXServices.pas"/>
@@ -1153,8 +1157,28 @@
         <CursorPos X="52" Y="212"/>
         <UsageCount Value="10"/>
       </Unit152>
+      <Unit153>
+        <Filename Value="../../design/ibsqleditor.pas"/>
+        <ComponentName Value="IBSQLEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="40"/>
+        <CursorPos X="21" Y="10"/>
+        <UsageCount Value="10"/>
+      </Unit153>
+      <Unit154>
+        <Filename Value="../../design/ibselectsqleditor.pas"/>
+        <ComponentName Value="IBSelectSQLEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="179"/>
+        <CursorPos Y="183"/>
+        <UsageCount Value="10"/>
+      </Unit154>
     </Units>
-    <JumpHistory Count="8" HistoryIndex="7">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
         <Filename Value="MainFormUnit.pas"/>
         <Caret Line="1044" Column="14" TopLine="1028"/>
@@ -1187,6 +1211,10 @@
         <Filename Value="MainFormUnit.pas"/>
         <Caret Line="342" Column="33" TopLine="317"/>
       </Position8>
+      <Position9>
+        <Filename Value="../../runtime/nongui/IBCustomDataSet.pas"/>
+        <Caret Line="751" Column="23" TopLine="733"/>
+      </Position9>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

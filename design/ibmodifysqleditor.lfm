@@ -18,20 +18,29 @@ inherited IBModifySQLEditorForm: TIBModifySQLEditorForm
     Top = 457
   end
   inherited QuoteFields: TCheckBox
-    Top = 472
+    Top = 482
+    Width = 118
   end
   inherited PageControl: TPageControl
-    Height = 428
     inherited SelectPage: TTabSheet
-      ClientHeight = 395
+      inherited Label1: TLabel
+        Height = 17
+        Width = 67
+      end
       inherited Label2: TLabel
         Left = 7
+        Height = 17
         Top = 224
-        Width = 106
+        Width = 100
         Caption = 'Updateable Fields'
       end
       inherited Label4: TLabel
         Left = 7
+        Height = 17
+        Width = 73
+      end
+      inherited SelectTableNames: TIBLookupComboEditBox
+        Height = 29
       end
       inherited FieldNamesGrid: TIBDynamicGrid
         Height = 104
@@ -42,12 +51,16 @@ inherited IBModifySQLEditorForm: TIBModifySQLEditorForm
       end
       inherited SelectSelectAll: TCheckBox
         Top = 344
+        Width = 128
+      end
+      inherited IncludeSysTables: TCheckBox
+        Width = 148
       end
       object Label5: TLabel[8]
         Left = 9
-        Height = 15
+        Height = 17
         Top = 152
-        Width = 138
+        Width = 127
         Caption = 'Computed By Columns'
       end
       object ReadOnlyGrid: TIBDynamicGrid[9]
@@ -89,9 +102,21 @@ inherited IBModifySQLEditorForm: TIBModifySQLEditorForm
       end
     end
     inherited ExecutePage: TTabSheet
-      ClientHeight = 395
+      inherited Label16: TLabel
+        Height = 17
+        Width = 95
+      end
+      inherited Label17: TLabel
+        Height = 17
+        Width = 98
+      end
       inherited Label18: TLabel
+        Height = 17
         Top = 240
+        Width = 107
+      end
+      inherited ProcedureNames: TIBLookupComboEditBox
+        Height = 29
       end
       inherited InputProcGrid: TIBDynamicGrid
         Height = 107
@@ -126,22 +151,33 @@ inherited IBModifySQLEditorForm: TIBModifySQLEditorForm
             DBLookupProperties.AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           end>
       end
+      inherited PackageNameLabel: TLabel
+        Height = 17
+        Width = 84
+      end
+      inherited PackageNames: TIBLookupComboEditBox
+        Height = 29
+      end
     end
   end
   inherited GenerateParams: TCheckBox
     Top = 448
+    Width = 163
   end
   inherited Panel1: TPanel
+    inherited Label3: TLabel
+      Height = 17
+    end
     inherited IBSQLEditFrame1: TIBSQLEditFrame
-      Height = 413
-      Top = 15
+      Height = 411
+      Top = 17
       Width = 555
       Align = alClient
       AutoSize = True
-      ClientHeight = 413
+      ClientHeight = 411
       ClientWidth = 555
       inherited SQLText: TSynEdit
-        Height = 387
+        Height = 385
         Width = 555
       end
       inherited ToolBar1: TToolBar
@@ -202,5 +238,13 @@ inherited IBModifySQLEditorForm: TIBModifySQLEditorForm
           end>
       end
     end
+  end
+  object IncludePrimaryKeys: TCheckBox[8]
+    Left = 24
+    Height = 22
+    Top = 465
+    Width = 222
+    Caption = 'Include Primary keys in Update SQL'
+    TabOrder = 8
   end
 end
